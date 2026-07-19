@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DB_WEB</title>
+    <link rel="stylesheet" href="css/css.css" />
+  </head>
+  <body>
+    <div class="db_web_wrap">
+      <div class="db_web_title">
+        <strong>DB_WEB 게시판</strong>
+        <p>바르고 고운말을 사용하도록 합시다.</p>
+      </div>
+      <div class="db_web_view_wrap">
+        <div class="db_web_view">
+          <div class="title"></div>
+          <div class="info">
+            <dl>
+              <dt>번호</dt>
+              <dd></dd>
+            </dl>
+            <dl>
+              <dt>글쓴이</dt>
+              <dd></dd>
+            </dl>
+            <dl>
+              <dt>작성일</dt>
+              <dd></dd>
+            </dl>
+            <dl>
+              <dt>조회</dt>
+              <dd></dd>
+            </dl>
+          </div>
+          <div class="cont"></div>
+        </div>
+        <div class="bt_wrap">
+          <a href="/main.html" class="on">목록</a>
+          <a href="/main/edit.html">수정</a>
+        </div>
+      </div>
+    </div>
+    <script>
+      const post = JSON.parse('${JSON.stringify(post)}');
+
+      const titleElement = document.querySelector('.db_web_view .title');
+      titleElement.textContent = post.title;
+
+      const numElement = document.querySelector(
+        '.db_web_view .info dd:first-child',
+      );
+      numElement.textContent = post.num;
+
+      const writerElement = document.querySelector(
+        '.db_web_view .info dd:nth-child(4)',
+      );
+      writerElement.textContent = post.writer;
+
+      const wDateElement = document.querySelector(
+        '.db_web_view .info dd:nth-child(6)',
+      );
+      wDateElement.textContent = post.w_date;
+
+      const rCountElement = document.querySelector(
+        '.db_web_view .info dd:last-child',
+      );
+      rCountElement.textContent = post.r_count;
+
+      const contElement = document.querySelector('.db_web_view .cont');
+      contElement.textContent = post.contents;
+    </script>
+  </body>
+</html>

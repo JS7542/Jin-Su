@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DB_WEB</title>
+    <link rel="stylesheet" href="css/css.css" />
+  </head>
+  <body>
+    <div class="db_web_wrap">
+      <div class="db_web_title">
+        <strong>DB_WEB 게시판</strong>
+        <p>바르고 고운말을 사용하도록 합시다.</p>
+      </div>
+      <div class="db_web_main_wrap">
+        <div class="db_web_main">
+          <div class="top">
+            <div class="num">번호</div>
+            <div class="title">제목</div>
+            <div class="writer">글쓴이</div>
+            <div class="w_date">작성일</div>
+            <div class="r_count">조회</div>
+          </div>
+          <div id="postsContainer">
+            <script>
+              // 게시물 목록이 표시될 컨테이너 요소
+              const postsContainer = document.getElementById('postsContainer');
+
+              // 서버에서 게시물 데이터를 가져와서 목록 생성
+              fetch('/main/posts')
+                .then((response) => response.json())
+                .then((posts) => {
+                  // 게시물 데이터를 돌면서 목록 아이템 생성
+                  posts.forEach((post) => {
+                    const postItem = document.createElement('div');
+                    postItem.classList.add('post-item');
+
+                    const num = document.createElement('div');
+                    num.classList.add('num');
+                    num.textContent = post.num;
+                    postItem.appendChild(num);
+
+                    const title = document.createElement('div');
+                    title.classList.add('title');
+                    const link = document.createElement('a');
+                    link.href = `/main/view/${post.num}`;
+                    link.textContent = post.title;
+                    title.appendChild(link);
+                    postItem.appendChild(title);
+
+                    const writer = document.createElement('div');
+                    writer.classList.add('writer');
+                    writer.textContent = post.writer;
+                    postItem.appendChild(writer);
+
+                    const w_date = document.createElement('div');
+                    w_date.classList.add('w_date');
+                    w_date.textContent = formatDate(post.w_date); // 게시일 형식화
+                    postItem.appendChild(w_date);
+
+                    const count = document.createElement('div');
+                    count.classList.add('r_count');
+                    count.textContent = post.r_count;
+                    postItem.appendChild(count);
+
+                    postsContainer.appendChild(postItem);
+                  });
+                })
+                .catch((error) => {
+                  console.error('Error fetching posts:', error);
+                });
+
+              // 날짜를 년/월/일 형식으로 변환하는 함수
+              function formatDate(dateString) {
+                const date = new Date(dateString);
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const formattedDate = `${year}-${month}-${day}`;
+
+                return formattedDate;
+              }
+            </script>
+          </div>
+        </div>
+        <div class="db_web_page" id="pageLinksContainer">
+          <script>
+            // 페이지 링크가 표시될 컨테이너 요소
+            const pageLinksContainer =
+              document.getElementById('pageLinksContainer');
+
+            // 서버에서 페이지 정보를 가져와서 페이지 링크 생성
+            fetch('/main/pages')
+              .then((response) => response.json())
+              .then((pages) => {
+                // 페이지 정보를 돌면서 링크 생성
+                pages.forEach((page) => {
+                  const pageLink = document.createElement('a');
+                  pageLink.href = `/main?page=${page}`;
+                  pageLink.textContent = page;
+                  if (page === currentPage) {
+                    pageLink.classList.add('current');
+                  }
+                  pageLinksContainer.appendChild(pageLink);
+                });
+              })
+              .catch((error) => {
+                console.error('Error fetching pages:', error);
+              });
+          </script>
+        </div>
+        <div class="db_web_page" id="pageLinksContainer">
+          <!-- 페이지 링크가 표시될 컨테이너 -->
+        </div>
+        <div class="bt_wrap">
+          <a href="write.html" class="on">등록</a>
+          <!--<a href="#">수정</a>-->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
